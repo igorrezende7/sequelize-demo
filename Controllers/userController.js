@@ -47,6 +47,25 @@ class UserController{
     }
   }
 
+  async update(req, res){
+    const {name, email, password} = req.body;
+
+    try {
+      const hash = bcrypt.hashSync(password, 10)
+      const user = await User.findByPk(req.token);
+      user.update({
+        email:email,
+        name:name,
+        password:hash
+      })
+      await user.save()
+      return res.status(200).json('Dados atualizados')
+
+    } catch (error) {
+        res.status(400).json('Erro ao atualizar dados')
+    }
+  }
+
 
 
   async getInfo(req, res){
